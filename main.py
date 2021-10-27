@@ -1,6 +1,10 @@
 import requests
-import re
 import regex
+
+"""
+TODO: Obtener imagen del poster
+TODO: Obtener IMDb rating
+"""
 
 URL_MOVIES = 'https://www.imdb.com/chart/top/'
 URL_TV_SHOWS = 'https://www.imdb.com/chart/toptv/'
@@ -26,6 +30,7 @@ def show_5_movies():
         movie_main_cast = regex.search(REGEX_MOVIE_MAIN_CAST,movie_match).group(0)
         print(f'{movie_title} - Año: {movie_year}\nDirector: {movie_director} - '+
         f'Cast: {movie_main_cast}')
+
 def show_5_tv_shows():
     print('Series de TV recomendadas:\n')
     for i in range(5):
@@ -45,4 +50,3 @@ if __name__ == '__main__':
         print(len(titles))
         
         show_5_tv_shows()
-        
