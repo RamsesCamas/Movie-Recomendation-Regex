@@ -3,7 +3,6 @@ import regex
 
 """
 TODO: Obtener imagen del poster
-TODO: Obtener IMDb rating
 """
 
 URL_MOVIES = 'https://www.imdb.com/chart/top/'
@@ -20,6 +19,8 @@ REGEX_MOVIE_DIRECTOR = r'(?<=<a href=".*"[\s\n]*title=")(.*)(?=\s\(dir\.\))'
 
 REGEX_MOVIE_MAIN_CAST = r'(?<=\(dir\.\),\s).*(?=")'
 
+REGEX_RATING = r'(?<=<td class="ratingColumn imdbRating">[\s\n]*<strong title=".*">)(.*)(?=</strong>)'
+
 def show_5_movies():
     print('Peliculas recomendadas:\n')
     for i in range(5):
@@ -28,8 +29,9 @@ def show_5_movies():
         movie_year = regex.search(REGEX_YEAR,movie_match).group(0)
         movie_director = regex.search(REGEX_MOVIE_DIRECTOR,movie_match).group(0)
         movie_main_cast = regex.search(REGEX_MOVIE_MAIN_CAST,movie_match).group(0)
+        movie_rating = rating_matches[i]
         print(f'{movie_title} - Año: {movie_year}\nDirector: {movie_director} - '+
-        f'Cast: {movie_main_cast}')
+        f'Cast: {movie_main_cast}\nPuntuación: {movie_rating}')
 
 def show_5_tv_shows():
     print('Series de TV recomendadas:\n')
@@ -37,16 +39,12 @@ def show_5_tv_shows():
         show_match = title_matches[i]
         show_title = regex.search(REGEX_TITLE,show_match).group(0)
         show_year = regex.search(REGEX_YEAR,show_match).group(0)
-        print(f'{show_title} - Año {show_year}')
-
+        show_rating = rating_matches[i]
+        print(f'{show_title} - Año {show_year} - Puntuación {show_rating}')
 
 if __name__ == '__main__':
     response = requests.get(URL_TV_SHOWS)
     if response.status_code == 200:
-        titles = []
         title_matches = regex.findall(REGEX_ALL_TITLE,response.text)
-        for title in title_matches:
-            titles.append(title)
-        print(len(titles))
-        
+        rating_matches = regex.findall(REGEX_RATING,response.text)
         show_5_tv_shows()
